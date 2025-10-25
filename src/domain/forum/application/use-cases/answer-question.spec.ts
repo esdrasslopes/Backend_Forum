@@ -1,0 +1,76 @@
+import { UniqueEntityID } from "@/core/entities/unique-entity-id";
+import { AnswerQuestionUseCase } from "./answer-question";
+import { InMemoryAnswersRepository } from "test/repositories/in-memory-answers-repository";
+import { InMemoryAnswerAttachmentsRepository } from "test/repositories/in-memory-answer-attachments-repository";
+
+let inMemoryAnswersRepository: InMemoryAnswersRepository;
+
+let inMemoryAnswersAttachmentsRepository: InMemoryAnswerAttachmentsRepository;
+
+let sut: AnswerQuestionUseCase;
+
+describe("Create anwers", () => {
+  beforeEach(() => {
+    inMemoryAnswersAttachmentsRepository =
+      new InMemoryAnswerAttachmentsRepository();
+
+    inMemoryAnswersRepository = new InMemoryAnswersRepository(
+      inMemoryAnswersAttachmentsRepository
+    );
+
+    sut = new AnswerQuestionUseCase(inMemoryAnswersRepository);
+  });
+
+  it("should be able to create an answer", async () => {
+    const result = await sut.execute({
+      content: "Nova question",
+      authorId: "1",
+      questionId: "2",
+      attachmentsIds: ["1", "2"],
+    });
+
+    expect(result.isRight()).toBe(true);
+
+    expect(inMemoryAnswersRepository.items[0].id).toEqual(
+      result.value?.answer.id
+    );
+
+    expect(
+      inMemoryAnswersRepository.items[0].attachments.currentItems
+    ).toHaveLength(2);
+
+    expect(inMemoryAnswersRepository.items[0].attachments.currentItems).toEqual(
+      [
+        expect.objectContaining({
+          attachmentId: new UniqueEntityID("1"),
+        }),
+        expect.objectContaining({
+          attachmentId: new UniqueEntityID("2"),
+        }),
+      ]
+    );
+  });
+
+  it("should persist attachments when creating a new answer", async () => {
+    const result = await sut.execute({
+      authorId: "1",
+      content: "Um nova questão",
+      attachmentsIds: ["1", "2"],
+      questionId: "1",
+    });
+
+    expect(result.isRight()).toBe(true);
+
+    expect(inMemoryAnswersAttachmentsRepository.items).toHaveLength(2);
+    expect(inMemoryAnswersAttachmentsRepository.items).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          attachmentId: new UniqueEntityID("1"),
+        }),
+        expect.objectContaining({
+          attachmentId: new UniqueEntityID("2"),
+        }),
+      ])
+    );
+  });
+});

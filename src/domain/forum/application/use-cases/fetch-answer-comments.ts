@@ -1,0 +1,38 @@
+import { Either, right } from "@/core/either";
+import { AnswerComment } from "../../enterprise/entities/answer-comment";
+import { AnswerCommentsRepository } from "../repositories/answer-comments-repository";
+import { Injectable } from "@nestjs/common";
+
+interface FetchAnswerCommentsUseCaseRequest {
+  page: number;
+  answerId: string;
+}
+
+type FetchAnswerCommentsUseCaseResponse = Either<
+  null,
+  {
+    answerComments: AnswerComment[];
+  }
+>;
+
+@Injectable()
+export class FetchAnswerCommentsUseCase {
+  private answerCommentsRepository: AnswerCommentsRepository;
+
+  constructor(answerCommentsRepository: AnswerCommentsRepository) {
+    this.answerCommentsRepository = answerCommentsRepository;
+  }
+
+  async execute({
+    page,
+    answerId,
+  }: FetchAnswerCommentsUseCaseRequest): Promise<FetchAnswerCommentsUseCaseResponse> {
+    const answerComments =
+      await this.answerCommentsRepository.findManyByAnswerId(
+        { page },
+        answerId
+      );
+
+    return right({ answerComments });
+  }
+}

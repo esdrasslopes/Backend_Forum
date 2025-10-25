@@ -1,0 +1,42 @@
+import { Module } from "@nestjs/common";
+import { PassportModule } from "@nestjs/passport";
+import { JwtModule } from "@nestjs/jwt";
+import { JwtStrategy } from "./jwt.strategy";
+import { JwtAuthGuard } from "./jwt-auth-guard";
+import { APP_GUARD } from "@nestjs/core";
+import { EnvService } from "../env/env.service";
+import { EnvModule } from "../env/env.module";
+
+@Module({
+  imports: [
+    PassportModule,
+    JwtModule.registerAsync({
+      inject: [EnvService],
+      imports: [EnvModule],
+      global: true,
+      useFactory(env: EnvService) {
+        const privateKey = env.get("JWT_PRIVATE_KEY");
+        const publicKey = env.get("JWT_PUBLIC_KEY");
+
+        return {
+          privateKey: Buffer.from(privateKey, "base64"),
+          publicKey: Buffer.from(publicKey, "base64"),
+          signOptions: {
+            algorithm: "RS256",
+          },
+        };
+      },
+    }),
+  ],
+  providers: [
+    JwtStrategy,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    EnvService,
+  ],
+})
+export class AuthModule {}
+
+// O passport torna a Strategy global, permitindo o acesso dentro de outros módulos. Ele faz isso no momento em que a strategy é criada e herda uma instância do passportModule.
