@@ -10,6 +10,8 @@ import { makeQuestion } from "test/factories/make-question";
 import { waitFor } from "test/utils/wait-for";
 import { makeAnswerComment } from "test/factories/make-answer-comment";
 import { InMemoryAnswerCommentsRepository } from "test/repositories/in-memory-answer-comments-repository";
+import { InMemoryAttachmentsRepository } from "test/repositories/in-memory-attachments-repository";
+import { InMemoryStudentsRepository } from "test/repositories/in-memory-students-repository";
 
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository;
 let inMemoryQuestionAttachmentsRepository: InMemoryQuestionAttachmentsRepository;
@@ -18,7 +20,8 @@ let inMemoryAnswerAttachmentsRepository: InMemoryAnswerAttachmentsRepository;
 let sendNotificationUseCase: SendNotificationUseCase;
 let InMemoryNotificatiosRepository: InMemoryNotificationsRepository;
 let inMemoryAnswerCommentsRepository: InMemoryAnswerCommentsRepository;
-
+let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository;
+let inMemoryStudentsRepository: InMemoryStudentsRepository;
 let sendNotificationExecuteSpy;
 
 describe("On answer comment created", () => {
@@ -33,13 +36,20 @@ describe("On answer comment created", () => {
     inMemoryQuestionAttachmentsRepository =
       new InMemoryQuestionAttachmentsRepository();
 
+    inMemoryAttachmentsRepository = new InMemoryAttachmentsRepository();
+    inMemoryStudentsRepository = new InMemoryStudentsRepository();
+
     inMemoryQuestionsRepository = new InMemoryQuestionsRepository(
-      inMemoryQuestionAttachmentsRepository
+      inMemoryQuestionAttachmentsRepository,
+      inMemoryStudentsRepository,
+      inMemoryAttachmentsRepository
     );
 
     InMemoryNotificatiosRepository = new InMemoryNotificationsRepository();
 
-    inMemoryAnswerCommentsRepository = new InMemoryAnswerCommentsRepository();
+    inMemoryAnswerCommentsRepository = new InMemoryAnswerCommentsRepository(
+      inMemoryStudentsRepository
+    );
 
     sendNotificationUseCase = new SendNotificationUseCase(
       InMemoryNotificatiosRepository

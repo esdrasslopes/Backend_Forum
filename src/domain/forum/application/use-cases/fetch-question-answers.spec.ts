@@ -5,9 +5,7 @@ import { UniqueEntityID } from "@/core/entities/unique-entity-id";
 import { InMemoryAnswerAttachmentsRepository } from "test/repositories/in-memory-answer-attachments-repository";
 
 let inMemoryAnswersRepository: InMemoryAnswersRepository;
-
 let inMemoryAnswersAttachmentsRepository: InMemoryAnswerAttachmentsRepository;
-
 let sut: FetchQuestionAnswersUseCase;
 
 describe("Fetch question answers", () => {
