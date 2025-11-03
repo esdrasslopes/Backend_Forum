@@ -4,7 +4,6 @@ import { InvalidAttachmentType } from "./errors/invalid-attachmente-type";
 import { Attachment } from "../../enterprise/entities/attachment";
 import { AttachmentsRepository } from "../repositories/attachments-repository";
 import { Uploader } from "../storage/uploader";
-import { file } from "zod";
 
 interface UploadAndCreateAttachmentUseCaseRequest {
   fileName: string;
