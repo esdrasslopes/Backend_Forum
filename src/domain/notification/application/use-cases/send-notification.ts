@@ -17,7 +17,7 @@ type SendNotificationUseCaseResponse = Either<
   }
 >;
 
-Injectable();
+@Injectable()
 export class SendNotificationUseCase {
   private notificationsRepository: NotificationsRepository;
 

@@ -5,7 +5,7 @@ import { SendNotificationUseCase } from "../use-cases/send-notification";
 import { QuestionCommentCreatedEvent } from "@/domain/forum/enterprise/events/question-comment-created-event";
 import { Injectable } from "@nestjs/common";
 
-Injectable();
+@Injectable()
 export class OnQuestionCommentCreated implements EventHandler {
   private questionsRepository: QuestionsRepository;
   private sendNotification: SendNotificationUseCase;
