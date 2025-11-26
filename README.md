@@ -1,4 +1,4 @@
-# 🗃️ NestJS Clean Architecture API
+# 🗃️ Fórum Clean Architecture API (NestJS)
 
 <div align="center">
 
@@ -16,10 +16,10 @@
 
 <p align="center">
  <a href="#-sobre-o-projeto">Sobre</a> •
- <a href="#-funcionalidades">Endpoints Principais</a> •
+ <a href="#-funcionalidades">Funcionalidades</a> •
  <a href="#-tecnologias-utilizadas">Tecnologias</a> •
- <a href="#-começando">Começando</a> •
- <a href="#-executando-os-testes">Testes</a> •
+ <a href="#-como-executar">Como Executar</a> •
+ <a href="#-testes">Testes</a> •
  <a href="#-licença">Licença</a>
 </p>
 
@@ -27,96 +27,106 @@
 
 ## 📖 Sobre o Projeto
 
-Este projeto é um esqueleto de aplicação **backend** construído em **NestJS** com foco em **Clean Architecture**. Ele foi projetado para ser robusto, testável e escalável, separando claramente as regras de negócio das camadas de infraestrutura. Utiliza **PostgreSQL** para persistência de dados (via Prisma) e **Redis** como cache, ambos orquestrados via **Docker Compose**.
+Este projeto é uma API de **Fórum de Perguntas e Respostas** construída com **NestJS** e **Clean Architecture**. O objetivo é fornecer uma base robusta, escalável e testável para aplicações de fórum, separando claramente as regras de negócio das camadas de infraestrutura.
 
-A estrutura do projeto sugere um ponto de entrada customizado (`infra/main.ts` conforme `nest-cli.json`), reforçando a abordagem de arquitetura limpa (Clean Architecture).
+O backend utiliza **PostgreSQL** (via Prisma) para persistência e **Redis** para cache, ambos orquestrados com **Docker Compose**. O projeto foi aprimorado em relação ao README padrão gerado pelo esqueleto inicial, trazendo mais clareza e detalhes sobre o domínio de fórum.
 
 ---
 
-## 🎯 Endpoints Principais
+## 🎯 Funcionalidades
 
-Com base no arquivo `client.http`, estes são alguns dos principais endpoints que a API oferece:
+A API permite:
 
-| Método | Endpoint | Descrição |
-| :--- | :--- | :--- |
-| `POST` | `/accounts` | Criação de um **novo usuário/conta**. |
-| `POST` | `/sessions` | **Autenticação** de usuário e geração de token JWT. |
-| `POST` | `/questions` | Criação de uma **nova pergunta** (requer autenticação). |
-| `GET` | `/questions` | Busca por **perguntas recentes** (requer autenticação). |
+- Cadastro e autenticação de usuários (JWT)
+- Criação, listagem e resposta de perguntas
+- Comentários em perguntas e respostas
+- Sistema de notificações para interações relevantes
+- Upload de anexos (com suporte a AWS S3)
+- Cache de dados com Redis para performance
 
-> **Nota:** O arquivo `client.http` contém exemplos prontos para serem executados em extensões como a **Thunder Client** ou **REST Client** no VS Code.
+### Principais Endpoints
+
+| Método | Endpoint                          | Descrição                                    |
+| :----- | :-------------------------------- | :------------------------------------------- |
+| `POST` | `/accounts`                       | Criação de novo usuário                      |
+| `POST` | `/sessions`                       | Autenticação e geração de token JWT          |
+| `POST` | `/questions`                      | Criação de nova pergunta (autenticado)       |
+| `GET`  | `/questions`                      | Listagem de perguntas recentes (autenticado) |
+| `POST` | `/questions/:questionId/answers`  | Responder uma pergunta                       |
+| `GET`  | `/questions/:questionId/answers`  | Listar respostas de uma pergunta             |
+| `POST` | `/questions/:questionId/comments` | Comentar em uma pergunta                     |
+| `POST` | `/answers/:answerId/comments`     | Comentar em uma resposta                     |
+
+> Exemplos completos no arquivo `client.http` (compatível com Thunder Client/REST Client no VS Code).
 
 ---
 
 ## ✨ Tecnologias Utilizadas
 
-O projeto foi construído utilizando as seguintes tecnologias:
-
-### Linguagens e Frameworks
-* **[Node.js](https://nodejs.org/en/)**: Ambiente de execução JavaScript.
-* **[NestJS](https://nestjs.com/)**: Framework para construção de aplicações backend escaláveis e eficientes.
-* **[TypeScript](https://www.typescriptlang.org/)**: Superset do JavaScript que adiciona tipagem estática.
-
-### Banco de Dados e Cache
-* **[PostgreSQL](https://www.postgresql.org/)**: Banco de dados relacional robusto.
-* **[Redis](https://redis.io/)**: Servidor de estrutura de dados em memória, usado como cache (`ioredis`).
-* **[Prisma](https://www.prisma.io/)**: ORM que simplifica a comunicação com o PostgreSQL.
-
-### Ferramentas e Utilitários
-* [cite_start]**[Docker](https://www.docker.com/)**: Para orquestração e isolamento dos serviços de banco de dados e cache[cite: 2].
-* **[Zod](https://zod.dev/)**: Biblioteca de validação de esquemas (schema validation) e tipagem.
-* **[Vitest](https://vitest.dev/)**: Framework de testes rápido e moderno para testes unitários/E2E.
-* **[Bcryptjs](https://github.com/dcodeIO/bcrypt.js)**: Para criptografia de senhas.
-* **AWS SDK S3**: Para manipulação de arquivos na nuvem (incluso nas dependências, `client-s3`).
-* **ESLint**: Para padronização e linting de código.
+- **Node.js** — Ambiente de execução JavaScript
+- **NestJS** — Framework backend modular e escalável
+- **TypeScript** — Tipagem estática para JavaScript
+- **PostgreSQL** — Banco de dados relacional
+- **Redis** — Cache em memória
+- **Prisma** — ORM para PostgreSQL
+- **Zod** — Validação de schemas
+- **Vitest** — Testes unitários e E2E
+- **Docker & Docker Compose** — Orquestração de containers
+- **Bcryptjs** — Criptografia de senhas
+- **AWS SDK S3** — Upload de arquivos
+- **ESLint** — Linting e padronização de código
 
 ---
 
-## 🚀 Começando
-
-Siga os passos abaixo para colocar o projeto em funcionamento na sua máquina local.
+## 🚀 Como Executar
 
 ### Pré-requisitos
 
-Certifique-se de ter as seguintes ferramentas instaladas:
+- Node.js v18+
+- pnpm (ou npm)
+- Docker e Docker Compose
 
-* **[Node.js](https://nodejs.org/en/)** (Recomendado v18+).
-* **[pnpm](https://pnpm.io/)** ou **[npm](https://www.npmjs.com/)** (O projeto usa `pnpm-lock.yaml`, então `pnpm` é sugerido, mas `npm` também funciona).
-* **[Docker](https://www.docker.com/products/docker-desktop/)** e **[Docker Compose](https://docs.docker.com/compose/install/)**.
+### Passos
 
-### Instalação e Configuração
+1. Instale as dependências:
 
-1.  **Instale as dependências**:
-    ```bash
-    pnpm install
-    # ou
-    npm install
-    ```
+   ```bash
+   pnpm install
+   # ou
+   npm install
+   ```
 
-2.  **Inicie os serviços com Docker Compose**:
-    [cite_start]O arquivo `docker-compose.yml` [cite: 2] inicia o PostgreSQL e o Redis:
-    ```bash
-    docker-compose up -d
-    ```
-    * [cite_start]O **PostgreSQL** ficará acessível na porta `5433`[cite: 2].
-    * [cite_start]O **Redis** (cache) ficará acessível na porta `6379`[cite: 2].
+2. Inicie os serviços de banco e cache:
 
-3.  **Configure as variáveis de ambiente**:
-    Crie seu arquivo `.env` (a partir de um modelo se houver, ou crie manualmente):
-    ```bash
-    cp .env.example .env # Se você tiver um .env.example
-    ```
-    [cite_start]*As configurações padrão para o banco (usuário: `postgres`, senha: `docker`, db: `nest-clean`) [cite: 2] [cite_start]e para o Redis (portas `5433` e `6379` respectivamente) [cite: 2] já estão definidas no `docker-compose.yml`.*
+   ```bash
+   docker-compose up -d
+   ```
 
-4.  **Execute as migrações do Prisma**:
-    Este comando irá aplicar o schema no seu banco de dados:
-    ```bash
-    npx prisma migrate dev
-    ```
+3. Configure as variáveis de ambiente:
 
-### Executando a Aplicação
+   ```bash
+   cp .env.example .env
+   ```
 
-Para iniciar a aplicação em modo de desenvolvimento com *hot-reload*:
+4. Execute as migrações do Prisma:
+
+   ```bash
+   npx prisma migrate dev
+   ```
+
+5. Inicie a aplicação em modo desenvolvimento:
+   ```bash
+   npm run start:dev
+   ```
+
+---
+
+## 🧪 Testes
+
+Execute os testes unitários e E2E com:
 
 ```bash
-npm run start:dev
+pnpm test
+# ou
+pnpm vitest --config vitest.config.e2e.ts
+```
