@@ -27,11 +27,9 @@
 
 ## 📖 Sobre o Projeto
 
-Este projeto é uma API completa para um **Fórum de Perguntas e Respostas**, inspirada em plataformas como Stack Overflow. Aqui, usuários podem criar contas, postar perguntas, responder, comentar, receber notificações e interagir em tempo real com o conteúdo do fórum.
+Este projeto é uma API de **Fórum de Perguntas e Respostas** construída com **NestJS** e **Clean Architecture**. O objetivo é fornecer uma base robusta, escalável e testável para aplicações de fórum, separando claramente as regras de negócio das camadas de infraestrutura.
 
-O sistema foi desenvolvido com **NestJS** seguindo os princípios da **Clean Architecture** e também de **DDD (Domain-Driven Design)**, garantindo separação clara entre regras de negócio e infraestrutura, além de alta testabilidade e escalabilidade.
-
-O backend utiliza **PostgreSQL** (via Prisma) para persistência dos dados e **Redis** para cache, ambos orquestrados com **Docker Compose**. O projeto foi aprimorado para servir como base sólida para qualquer aplicação de fórum moderno, com exemplos práticos de autenticação, notificações, uploads e muito mais.
+O backend utiliza **PostgreSQL** (via Prisma) para persistência e **Redis** para cache, ambos orquestrados com **Docker Compose**. O projeto foi aprimorado em relação ao README padrão gerado pelo esqueleto inicial, trazendo mais clareza e detalhes sobre o domínio de fórum.
 
 ---
 
