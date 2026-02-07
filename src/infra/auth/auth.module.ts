@@ -39,4 +39,4 @@ import { EnvModule } from "../env/env.module";
 })
 export class AuthModule {}
 
-// O passport torna a Strategy global, permitindo o acesso dentro de outros módulos. Ele faz isso no momento em que a strategy é criada e herda uma instância do passportModule.
+// O passport torna a Strategy global a partir do APP_GUARD, permitindo o acesso dentro de outros módulos. Com o APP_GUARD todas as rotas vão chamar ele JWTAuthGuard automaticamente.

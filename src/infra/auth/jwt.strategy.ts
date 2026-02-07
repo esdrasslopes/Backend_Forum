@@ -26,3 +26,5 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     return tokenPayloadSchema.parse(payload);
   }
 }
+
+// O passportStrategy é uma forma de mosrar para o nest que uma strategy servirá como service. Além disso, o tipo passado, é tipo de strategy que será usado no service.
